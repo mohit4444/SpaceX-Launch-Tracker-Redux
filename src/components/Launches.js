@@ -1,6 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+// Launches.js
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchAllLaunches } from "../api/LaunchesAPI";
-import { FilterContext } from "../contexts/FilterContext";
+import {
+  updateYearFilter,
+  updateSuccessFilter,
+  updateSortOrder,
+} from "../state/filtersSlice";
 import {
   LaunchesContainer,
   LaunchesResults,
@@ -9,6 +15,7 @@ import {
 import Card from "./Card";
 
 function Launches() {
+  const dispatch = useDispatch();
   const [launchData, setLaunchData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,8 +33,9 @@ function Launches() {
       });
   }, []);
 
-  const { yearFilter, successFilter, sortOrder, updateFilters } =
-    useContext(FilterContext);
+  const { yearFilter, successFilter, sortOrder } = useSelector(
+    (state) => state.filters
+  );
 
   const filteredLaunches = (launchData || [])
     .filter((item) => {
@@ -53,15 +61,15 @@ function Launches() {
     });
 
   const handleYearFilterChange = (e) => {
-    updateFilters({ year: e.target.value });
+    dispatch(updateYearFilter(e.target.value));
   };
 
   const handleSuccessFilterChange = (e) => {
-    updateFilters({ success: e.target.value });
+    dispatch(updateSuccessFilter(e.target.value));
   };
 
   const handleSortOrderChange = (e) => {
-    updateFilters({ order: e.target.value });
+    dispatch(updateSortOrder(e.target.value));
   };
 
   if (isLoading) return <h1>Loading...</h1>;

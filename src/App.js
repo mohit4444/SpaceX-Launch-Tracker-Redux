@@ -1,15 +1,16 @@
 import { ThemeProvider } from "styled-components";
-import { FilterProvider } from "./contexts/FilterContext";
 import GlobalStyles from "./styles/Global";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import LaunchDetails from "./components/LaunchDetails";
 import { theme } from "./config";
+import { Provider } from "react-redux";
+import store from "./state/store";
 
 function App() {
   return (
-    <FilterProvider>
+    <Provider store={store}>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Router>
@@ -28,7 +29,7 @@ function App() {
           </Routes>
         </Router>
       </ThemeProvider>
-    </FilterProvider>
+    </Provider>
   );
 }
 
